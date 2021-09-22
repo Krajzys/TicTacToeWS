@@ -1,0 +1,29 @@
+body {
+    background: linear-gradient(0.25turn, #639eb8, #b8834c);;
+}
+
+div.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column nowrap;
+}
+
+div.infoBox {
+    text-align: center;
+    background-color: #FFFFFF;
+    width: 390px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: x-large;
+    border: black double;
+    margin: 1rem;
+}
+
+canvas#myCanvas {
+    margin: 1rem;
+}
+
+button#resetButton {
+    margin: 1rem;
+}
