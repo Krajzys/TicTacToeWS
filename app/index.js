@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     generateIDButton.addEventListener('click', (event) => {
         gameIDInput.value = generateID()
-        infoBox.innerText += `\nShare this generated code with your friend`
+        connectionStatus.innerText = `Share this code (${gameIDInput.value}) with your friend`
     })
 
     connectButton.addEventListener('click', (event) => {
@@ -121,10 +121,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return
         }
 
+        
         if (ws !== undefined) {
             infoBox.innerText = 'You already have one open connection!'
             return
         }
+        
+        board = [
+            [' ', ' ', ' '],
+            [' ', ' ', ' '],
+            [' ', ' ', ' ']
+        ]
+        turn = 'X'
+        state = ''
+        infoBox.innerText = `${turn} turn`
+        drawBoard()
+        resetButton.setAttribute('hidden', true)
 
         ws = new WebSocket(`ws://localhost:3456`)
 
@@ -160,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (wins === '-') {
                     state = 'draw'
                     infoBox.innerText = 'It\'s a draw!\n'
-                    infoBox.innerText = `Press Reset to restart`
+                    infoBox.innerText += `Press Reset to restart`
                 } else if (wins !== '') {
                     state = 'win'
                     infoBox.innerText = `${wins} has won!\n`
@@ -216,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(`Translates to: ${x} ${y}`)
 
-        if ((state === '' && ws === undefined) || (connStatus = 'Connected, both players present' && turn == currPlayer)) {
+        if ((state === '' && ws === undefined) || (connStatus === 'Connected' && turn === currPlayer)) {
             let moveOK = checkMove(x, y)
             if (moveOK) {
                 board[x][y] = turn

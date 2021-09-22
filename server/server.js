@@ -89,9 +89,11 @@ wss.on("connection", ws => {
             board = boardFromString(dataAsString.substr(dataAsString.indexOf(' ') + 1))
             foundRoom.board = board
             if (ws.connNo === 1) {
-                foundRoom.conn2.send(`STATE ${boardToString(board)}`)
+                if (foundRoom.conn2 !== undefined)
+                    foundRoom.conn2.send(`STATE ${boardToString(board)}`)
             } else {
-                foundRoom.conn1.send(`STATE ${boardToString(board)}`)
+                if (foundRoom.conn1 !== undefined)
+                    foundRoom.conn1.send(`STATE ${boardToString(board)}`)
             }
         }
         else if (dataAsString.startsWith('TURN')) {
@@ -108,11 +110,13 @@ wss.on("connection", ws => {
             console.log('Room was found. Removing player from room')
             if (ws.connNo === 1) {
                 foundRoom.conn1 = undefined
-                foundRoom.conn2.send('LEFT')
+                if (foundRoom.conn2 !== undefined)
+                    foundRoom.conn2.send('LEFT')
             }
             else {
                 foundRoom.conn2 = undefined
-                foundRoom.conn1.send('LEFT')
+                if (foundRoom.conn1 !== undefined)
+                    foundRoom.conn1.send('LEFT')
             }
 
             if (foundRoom.conn1 === undefined && foundRoom.conn2 === undefined) {
