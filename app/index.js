@@ -19,6 +19,7 @@ let currPlayer = 'X'
 let turn = 'X'
 let state = ''
 let ws = undefined
+let connStatus = 'Not connected'
 
 function checkWin() {
     let win = ''
@@ -98,6 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.querySelector(`#myCanvas`)
     const resetButton = document.querySelector(`#resetButton`)
     const infoBox = document.querySelector(`.infoBox`)
+    const playAs = document.querySelector(`.playAs`)
+    const connectionStatus = document.querySelector(`.connectionStatus`)
     const gameIDInput = document.querySelector(`#gameID`)
     const connectButton = document.querySelector(`#connectButton`)
     const generateIDButton = document.querySelector(`#generateIDButton`)
@@ -135,9 +138,20 @@ document.addEventListener('DOMContentLoaded', () => {
             let dataAsString = data.data.toString()
             if (dataAsString.startsWith('CONNECTED')) {
                 currPlayer = dataAsString.substr(dataAsString.indexOf(' ') + 1)
+                playAs.innerText = `You play as ${currPlayer}`
+                connStatus = 'Waiting for other player'
+                connectionStatus.innerText = 'Connected, waiting for other player'
+            }
+            if (dataAsString.startsWith('START')) {
+                connStatus = 'Connected'
+                connectionStatus.innerText = 'Connected, both players present'
+            }
+            if (dataAsString.startsWith('LEFT')) {
+                connStatus = 'Waiting for other player'
+                connectionStatus.innerText = 'Connected, waiting for other player'
             }
             if (dataAsString.startsWith('REJECT')) {
-                // TODO: jakis message
+                connectionStatus.innerText = 'The game you are trying to join is full'
             }
             if (dataAsString.startsWith('STATE')) {
                 let boardState = dataAsString.substr(dataAsString.indexOf(' ') + 1)
@@ -202,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(`Translates to: ${x} ${y}`)
 
-        if (state === '' && (turn == currPlayer || ws === undefined)) {
+        if ((state === '' && ws === undefined) || (connStatus = 'Connected, both players present' && turn == currPlayer)) {
             let moveOK = checkMove(x, y)
             if (moveOK) {
                 board[x][y] = turn
@@ -216,8 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     state = 'win'
                     infoBox.innerText = `${wins} has won!\n`
                     infoBox.innerText += `Press Reset to restart`
-                }
-                else {
+                } else {
                     turn = (turn === 'X')?'O':'X'
                     infoBox.innerText = `${turn} turn`
                 }

@@ -9,21 +9,15 @@ div.main {
     flex-flow: column nowrap;
 }
 
-div.infoBox {
+div.playAs, div.infoBox, div.connectionStatus {
     text-align: center;
     background-color: #FFFFFF;
     width: 390px;
     padding: 10px;
     font-weight: bold;
-    font-size: x-large;
     border: black double;
-    margin: 1rem;
 }
 
-canvas#myCanvas {
-    margin: 1rem;
-}
-
-button#resetButton {
-    margin: 1rem;
+div.infoBox {
+    font-size: x-large;
 }
