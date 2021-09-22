@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (wins === '-') {
                     state = 'draw'
                     infoBox.innerText = 'It\'s a draw!\n'
-                    infoBox.innerText = `Press Reset to restart`
+                    infoBox.innerText =+ `Press Reset to restart`
                 } else if (wins !== '') {
                     state = 'win'
                     infoBox.innerText = `${wins} has won!\n`
